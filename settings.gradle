@@ -1,0 +1,2 @@
+rootProject.name='简易云音乐'
+include ':app'

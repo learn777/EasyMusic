@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">简易云音乐</string>
+    <string name="tab_text_1">歌单</string>
+    <string name="tab_text_2">歌曲</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="SONGS_LIST_NAME">请选择歌单</string>
+    <string name="BTN_PRE">上一曲</string>
+    <string name="BTN_PLAY">播放</string>
+    <string name="BTN_NEXT">下一曲</string>
+    <string name="TIME_ZORE">0:00</string>
+    <string name="SONG_NAME">未知歌曲</string>
+    <string name="TIME_NOW">-∞</string>
+    <string name="TIME_MAX">+∞</string>
+    <string name="POPUP_DELETE">删除</string>
+    <string name="POPUP_UPDATE">刷新</string>
+    <string name="POPUP_CANCEL">取消</string>
+</resources>
