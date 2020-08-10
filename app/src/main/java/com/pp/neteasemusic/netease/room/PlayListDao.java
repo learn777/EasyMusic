@@ -1,7 +1,6 @@
 package com.pp.neteasemusic.netease.room;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -13,8 +12,8 @@ public interface PlayListDao {
     @Insert
     void insert(PlayList... lists);
 
-    @Delete
-    void delete(PlayList... lists);
+    @Query("DELETE FROM PLAYLIST WHERE playID = :id")
+    void delete(String id);
 
     @Update
     void update(PlayList... lists);

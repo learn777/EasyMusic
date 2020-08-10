@@ -24,14 +24,12 @@ public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView 
     private BitmapShader shader;
 
     public PlayListCover(Context context) {
-        super(context);
-        mPaint = new Paint();
+        this(context, null);
 //        mPaint.setFilterBitmap(true);
     }
 
     public PlayListCover(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        mPaint = new Paint();
+        this(context, attrs, 0);
 //        mPaint.setFilterBitmap(true);
     }
 
@@ -102,13 +100,6 @@ public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView 
 
     @Override
     public void run() {
-        //     float px = (float) (0.2*(RoomManager.getDisplayMetrics().widthPixels / 2 + 0.5 - ScreenSizeUtils.dip2px(4)));
-        float px = 0.05f * getMeasuredHeight();
-        animator = ObjectAnimator.ofFloat(this, "translationY", -px, px, -px, px, -px, 0);
-        animator.setDuration(800);
-        if (!animator.isRunning()) {
-            animator.start();
-        }
         if (onLongClick != null) {
             onLongClick.onClick(this);
         }

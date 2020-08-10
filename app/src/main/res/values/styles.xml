@@ -8,7 +8,13 @@
         <item name="colorAccent">#33FF1C</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.Launch">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Main">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

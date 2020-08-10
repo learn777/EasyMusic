@@ -77,7 +77,14 @@ public class PlayListAdapter extends ListAdapter<PlayList, PlayListAdapter.PlayL
                 holder.cover.setImageBitmap(response);
                 holder.name.setText(getCurrentList().get(position).getName());
             }
-        }, px, px, ImageView.ScaleType.FIT_XY, Bitmap.Config.RGB_565, null));
+        }, px, px, ImageView.ScaleType.CENTER_INSIDE, Bitmap.Config.RGB_565, null));
+        holder.cover.setOnLongClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RoomManager.getDao().delete(getCurrentList().get(position).getPlayID());
+                submitList(RoomManager.getDao().getAll());
+            }
+        });
     }
 
     @Override
