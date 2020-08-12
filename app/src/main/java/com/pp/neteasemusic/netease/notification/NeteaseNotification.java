@@ -65,7 +65,7 @@ public class NeteaseNotification {
                             .setSmallIcon(R.drawable.ic_toys_green_24dp)
                             .setTicker("有一个通知")
                             .setOngoing(true)
-                            .setPriority(NotificationCompat.PRIORITY_MAX)
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
                             .build(); // 创建通知（每个通知必须要调用这个方法来创建）
                     notificationManager.notify(NOTIFICATION_REQUEST_CODE_MUSIC, instance);
                 }

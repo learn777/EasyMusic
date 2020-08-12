@@ -21,6 +21,8 @@ import com.pp.neteasemusic.netease.json.NeteaseResult;
 import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.utils.OperationFrom;
 
+import java.util.Objects;
+
 
 public class SongListFragment extends Fragment implements View.OnClickListener {
     private FragmentSongListBinding binding;
@@ -177,6 +179,9 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             }
         } catch (RemoteException e) {
             e.printStackTrace();
+        }
+        if (SongListViewModel.getMusicInfo().getValue() != null) {
+            binding.songName.setText(Objects.requireNonNull(SongListViewModel.getMusicInfo().getValue()).getName());
         }
         updateSongList(false);
         super.onResume();
