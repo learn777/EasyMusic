@@ -29,6 +29,13 @@ public class homeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+        int resourcesId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourcesId > 0) {
+            int height = getResources().getDimensionPixelSize(resourcesId);
+            binding.tabs.setPadding(0, height, 0, 0);
+            System.out.println("----------------" + height + "px------------------------");
+        }
         return binding.getRoot();
     }
 

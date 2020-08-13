@@ -5,8 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -15,6 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.pp.neteasemusic.databinding.ActivityMainBinding;
 import com.pp.neteasemusic.netease.receiver.NetEaseReceiver;
 import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.service.MusicService;
@@ -40,8 +46,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppTheme_Main);
-        setContentView(R.layout.activity_main);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //5.0 全透明实现
+            //getWindow.setStatusBarColor(Color.TRANSPARENT)
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //4.4 全透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        setContentView(binding.getRoot());
 
         RoomManager.initRoomManager(getApplicationContext());
         RoomManager.setDisplay(getWindowManager().getDefaultDisplay());
@@ -56,14 +78,6 @@ public class MainActivity extends AppCompatActivity {
         intentFilter.addAction(NetEaseReceiver.NOTIFICATION_ITEM_BUTTON_PLAY);
         intentFilter.addAction(NetEaseReceiver.NOTIFICATION_ITEM_BUTTON_NEXT);
         registerReceiver(receiver, intentFilter);
-        //获取状态栏高度
-        int height = 0;
-        int resourceId = getApplicationContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            height = getApplicationContext().getResources().getDimensionPixelSize(resourceId);
-        }
-        System.out.println("Status bar height-----------");
-        System.out.println(height);
 
         controller = Navigation.findNavController(this, R.id.fragment);
         NavigationView navigationView = findViewById(R.id.nav_view);

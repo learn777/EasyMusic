@@ -3,7 +3,6 @@ package com.pp.neteasemusic.ui.playlist;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +25,6 @@ import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.utils.NetworkCheckUtils;
 import com.pp.neteasemusic.netease.utils.ToastUtils;
 import com.pp.neteasemusic.netease.volley.VolleySingleton;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class PlayListFragment extends Fragment implements View.OnClickListener {
     private PlayListAdapter adapter;
@@ -60,20 +56,6 @@ public class PlayListFragment extends Fragment implements View.OnClickListener {
             ToastUtils.ToastNoAppName("网络不可用,检查后重试").show();
         } else {
             adapter.submitList(RoomManager.getDao().getAll());
-        }
-
-        try {
-            Class clazz = binding.getClass();
-            Field field = clazz.getDeclaredField("playList");
-            clazz = field.getClass();
-            Method[] methods = clazz.getMethods();
-            Log.d("start", "********************start***************");
-            for (Method method : methods) {
-                System.out.println(method.getName());
-            }
-            Log.d("end", "********************end***************");
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
         }
         return binding.getRoot();
     }

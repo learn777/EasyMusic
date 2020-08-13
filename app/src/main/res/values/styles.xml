@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#C611C6</item>
         <item name="colorPrimaryDark">#C6C5C5</item>
@@ -9,22 +9,11 @@
     </style>
 
     <style name="AppTheme.Launch">
+        <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.Main">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
 
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <style name="AppTheme.Main" />
 </resources>
