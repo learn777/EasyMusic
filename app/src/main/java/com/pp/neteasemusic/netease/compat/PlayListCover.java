@@ -10,6 +10,7 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
+import android.view.animation.Animation;
 
 import androidx.annotation.Nullable;
 
@@ -22,6 +23,12 @@ public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView 
     private OnClickListener onLongClick = null;
     private ObjectAnimator animator = null;
     private BitmapShader shader;
+
+    @Override
+    public void setAnimation(Animation animation) {
+
+        super.setAnimation(animation);
+    }
 
     public PlayListCover(Context context) {
         this(context, null);

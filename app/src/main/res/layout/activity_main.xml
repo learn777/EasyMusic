@@ -23,6 +23,7 @@
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.Main"
         android:visibility="visible"
+        app:headerLayout="@layout/cell_header_layout"
         app:insetForeground="@null"
         app:menu="@menu/drawer_left_menu" />
 

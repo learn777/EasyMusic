@@ -41,6 +41,7 @@ public class PlayListFragment extends Fragment implements View.OnClickListener {
         binding.playList.setLayoutManager(new GridLayoutManager(requireActivity().getApplicationContext(), 2, GridLayoutManager.VERTICAL, false));
         binding.playList.setAdapter(adapter);
         binding.fab.setOnClickListener(this);
+        binding.fab.getBackgroundTintList();
         binding.refreshPlayList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

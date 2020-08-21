@@ -2,6 +2,7 @@ package com.pp.neteasemusic.netease.compat;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.animation.Animation;
 
 import androidx.annotation.Nullable;
 
@@ -16,6 +17,11 @@ public class AutoScrollTextView extends androidx.appcompat.widget.AppCompatTextV
 
     public AutoScrollTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    public void setAnimation(Animation animation) {
+        super.setAnimation(animation);
     }
 
     @Override

@@ -25,6 +25,9 @@ import com.pp.neteasemusic.netease.receiver.NetEaseReceiver;
 import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.service.MusicService;
 
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
+
 public class MainActivity extends AppCompatActivity {
     NavController controller;
     AppBarConfiguration configuration;
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-
+        SoftReference<String> softReference = new SoftReference<>("", new ReferenceQueue<String>());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //5.0 全透明实现
