@@ -150,7 +150,6 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 if (adapter.getAnimator() != null) {
                     adapter.getAnimator().end();
                 }
-                adapter.getOldHolder().layout.setBackgroundColor(0xffffff);
                 adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
                 adapter.getOldHolder().order.setVisibility(View.VISIBLE);
             }
@@ -161,7 +160,6 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             holder = (SongsListAdapter.ViewHolder) binding.songList.findViewHolderForAdapterPosition(SongListViewModel.getCurrent());
             System.out.println("findViewHolderForLayoutPosition::" + SongListViewModel.getCurrent());
             if (holder != null) {
-                holder.layout.setBackgroundColor(0x00ff00);
                 holder.order.setVisibility(View.INVISIBLE);
                 try {
                     holder.viewStub.inflate();

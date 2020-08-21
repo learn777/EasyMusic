@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -127,7 +126,6 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView order, song_duration, song_name;
         ImageView toys;
-        ConstraintLayout layout;
         ViewStub viewStub;
 
         ViewHolder(@NonNull View itemView) {
@@ -136,7 +134,6 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
             song_name = itemView.findViewById(R.id.song_name);
             song_duration = itemView.findViewById(R.id.song_duration);
             viewStub = itemView.findViewById(R.id.viewStub);
-            layout = itemView.findViewById(R.id.card_layout);
         }
     }
 }

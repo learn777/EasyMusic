@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.ViewConfiguration;
 import android.view.animation.Animation;
 
 import androidx.annotation.Nullable;
@@ -17,6 +16,7 @@ import androidx.annotation.Nullable;
 public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView implements Runnable {
     private static final int TOUCH_SLOP = 2;
     Paint mPaint;
+    private final int LONG_PRESS_TIME = 3000;
     private int lastX, lastY;
     private boolean isMove = false;
     private OnClickListener onClick = null;
@@ -79,7 +79,7 @@ public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView 
                 lastY = (int) event.getY();
                 isMove = false;
                 animator = null;
-                postDelayed(this, ViewConfiguration.getLongPressTimeout());
+                postDelayed(this, LONG_PRESS_TIME);
                 break;
             case MotionEvent.ACTION_UP:
                 System.out.println("松开了：" + lastX + "," + lastY);
