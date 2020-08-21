@@ -6,6 +6,7 @@
     android:gravity="center">
 
     <ImageView
+        android:id="@+id/stub_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_toys_green_24dp" />

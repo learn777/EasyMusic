@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.pp.neteasemusic.R;
@@ -45,11 +44,10 @@ public class homeFragment extends Fragment {
         //初始化通知栏相关设置
         NeteaseNotification.initInstance();
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(requireContext(), getChildFragmentManager());
-        ViewPager viewPager = requireView().findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
+        binding.viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = requireView().findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
+        tabs.setupWithViewPager(binding.viewPager);
 
-        RoomManager.setViewPager(viewPager);
+        RoomManager.setViewPager(binding.viewPager);
     }
 }

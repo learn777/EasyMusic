@@ -1,5 +1,6 @@
 package com.pp.neteasemusic.ui.songlist;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.LayoutInflater;
@@ -146,21 +147,30 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         if (SongListViewModel.getCurrent() >= 0) {
             //改变原本播放的
             if (adapter.getOldHolder() != null) {
+                if (adapter.getAnimator() != null) {
+                    adapter.getAnimator().end();
+                }
+                adapter.getOldHolder().layout.setBackgroundColor(0xffffff);
                 adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
                 adapter.getOldHolder().order.setVisibility(View.VISIBLE);
             }
+
             //改变现在播放的
             System.out.println("SongListViewModel.getCurrent()::" + SongListViewModel.getCurrent());
             SongsListAdapter.ViewHolder holder;
             holder = (SongsListAdapter.ViewHolder) binding.songList.findViewHolderForAdapterPosition(SongListViewModel.getCurrent());
             System.out.println("findViewHolderForLayoutPosition::" + SongListViewModel.getCurrent());
             if (holder != null) {
+                holder.layout.setBackgroundColor(0x00ff00);
                 holder.order.setVisibility(View.INVISIBLE);
                 try {
                     holder.viewStub.inflate();
                 } catch (Exception e) {
                     holder.viewStub.setVisibility(View.VISIBLE);
+                } finally {
+                    holder.toys = holder.itemView.findViewById(R.id.stub_icon);
                 }
+                adapter.setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
                 adapter.setOld_holder(holder);
             }
         }

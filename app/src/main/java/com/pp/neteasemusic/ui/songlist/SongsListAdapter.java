@@ -1,12 +1,17 @@
 package com.pp.neteasemusic.ui.songlist;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +25,22 @@ import java.util.Objects;
 
 public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.ViewHolder> {
     private ViewHolder old_holder = null;
+
+    private ObjectAnimator animator = null;
+
+    ObjectAnimator getAnimator() {
+        return animator;
+    }
+
+    void setAnimator(ObjectAnimator animator) {
+        animator.setRepeatMode(ValueAnimator.RESTART);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(1000);
+        this.animator = animator;
+        animator.start();
+
+    }
 
     SongsListAdapter() {
         super(new DiffUtil.ItemCallback<MusicInfo>() {
@@ -43,6 +64,9 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (animator != null && animator.isRunning()) {
+                    animator.end();
+                }
                 if (SongListViewModel.isClickAble() || !Objects.requireNonNull(SongListViewModel.getMusicInfo().getValue()).getId().equals(Objects.requireNonNull(SongListViewModel.getSongsList().getValue()).getResult().getTracks().get(holder.getAdapterPosition()).getId()) || SongListViewModel.getMusicInfo().getValue() == null) {
                     SongListViewModel.setClickAble(false);
                     if (old_holder != null) {
@@ -54,6 +78,8 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
                         holder.viewStub.inflate();// 第二次加载会抛出异常
                     } catch (Exception e) {
                         holder.viewStub.setVisibility(View.VISIBLE);
+                    } finally {
+                        holder.toys = holder.itemView.findViewById(R.id.stub_icon);
                     }
                     holder.order.setVisibility(View.INVISIBLE);
                     SongListViewModel.setCurrent(holder.getAdapterPosition(), OperationFrom.BOTTOM_BAR);
@@ -100,6 +126,8 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView order, song_duration, song_name;
+        ImageView toys;
+        ConstraintLayout layout;
         ViewStub viewStub;
 
         ViewHolder(@NonNull View itemView) {
@@ -108,6 +136,7 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
             song_name = itemView.findViewById(R.id.song_name);
             song_duration = itemView.findViewById(R.id.song_duration);
             viewStub = itemView.findViewById(R.id.viewStub);
+            layout = itemView.findViewById(R.id.card_layout);
         }
     }
 }
