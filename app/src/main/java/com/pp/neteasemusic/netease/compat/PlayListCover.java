@@ -21,6 +21,7 @@ public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView 
     private boolean isMove = false;
     private OnClickListener onClick = null;
     private OnClickListener onLongClick = null;
+    private boolean long_press_mask = false;
     private ObjectAnimator animator = null;
     private BitmapShader shader;
 
@@ -79,9 +80,11 @@ public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView 
                 lastY = (int) event.getY();
                 isMove = false;
                 animator = null;
+                long_press_mask = true;
                 postDelayed(this, LONG_PRESS_TIME);
                 break;
             case MotionEvent.ACTION_UP:
+                long_press_mask = false;
                 System.out.println("松开了：" + lastX + "," + lastY);
                 removeCallbacks(this);
                 if (animator == null && onClick != null) {
@@ -89,6 +92,7 @@ public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView 
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+                long_press_mask = false;
                 System.out.println("滑动了：" + lastX + "," + lastY);
                 if (isMove) {
                     removeCallbacks(this);
@@ -107,7 +111,7 @@ public class PlayListCover extends androidx.appcompat.widget.AppCompatImageView 
 
     @Override
     public void run() {
-        if (onLongClick != null) {
+        if (onLongClick != null && long_press_mask) {
             onLongClick.onClick(this);
         }
     }

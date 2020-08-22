@@ -32,13 +32,14 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
     }
 
     void setAnimator(ObjectAnimator animator) {
-        animator.setRepeatMode(ValueAnimator.RESTART);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(1000);
-        this.animator = animator;
-        animator.start();
-
+        if (animator != null) {
+            animator.setRepeatMode(ValueAnimator.RESTART);
+            animator.setRepeatCount(ValueAnimator.INFINITE);
+            animator.setInterpolator(new LinearInterpolator());
+            animator.setDuration(1000);
+            this.animator = animator;
+            animator.start();
+        }
     }
 
     SongsListAdapter() {

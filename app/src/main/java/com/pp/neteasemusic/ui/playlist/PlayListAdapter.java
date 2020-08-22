@@ -106,11 +106,5 @@ public class PlayListAdapter extends ListAdapter<PlayList, PlayListAdapter.PlayL
             name = itemView.findViewById(R.id.name);
             cover = itemView.findViewById(R.id.cover);
         }
-
-        public void setCoverOnClickListener(View.OnClickListener listener) {
-            if (cover != null) {
-                cover.setOnClick(listener);
-            }
-        }
     }
 }

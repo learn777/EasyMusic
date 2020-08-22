@@ -5,13 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -24,6 +19,7 @@ import com.pp.neteasemusic.databinding.ActivityMainBinding;
 import com.pp.neteasemusic.netease.receiver.NetEaseReceiver;
 import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.service.MusicService;
+import com.pp.utils.StatusBarUtils;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
@@ -51,21 +47,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         SoftReference<String> softReference = new SoftReference<>("", new ReferenceQueue<String>());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //5.0 全透明实现
-            //getWindow.setStatusBarColor(Color.TRANSPARENT)
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //4.4 全透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        StatusBarUtils.setBarTranslucent(this, true);
+        StatusBarUtils.setStatusBarFontColor(this, false);
         setContentView(binding.getRoot());
 
         RoomManager.initRoomManager(getApplicationContext());

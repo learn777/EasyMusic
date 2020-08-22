@@ -143,6 +143,9 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         SongListViewModel.getUpdate().setValue(false);
     }
 
+    /*
+     *  更新播放列表信息以及列表UI状态
+     */
     private void updateSongList(boolean scrollToTop) {
         if (SongListViewModel.getCurrent() >= 0) {
             //改变原本播放的
@@ -177,6 +180,9 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /*
+     * 从后台切换至前台时刷新UI
+     */
     @Override
     public void onResume() {
         System.out.println("onResume ");
@@ -195,6 +201,9 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         super.onResume();
     }
 
+    /*
+     *切换至后台时清理UI刷新，节省资源
+     */
     @Override
     public void onPause() {
         System.out.println("onPause ");
@@ -203,6 +212,8 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             updateProgress.cancel(true);
             updateProgress = null;
         }
+        adapter.getAnimator().pause();
+        adapter.setAnimator(null);
         super.onPause();
     }
 }
