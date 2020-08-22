@@ -149,10 +149,8 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
     private void updateSongList(boolean scrollToTop) {
         if (SongListViewModel.getCurrent() >= 0) {
             //改变原本播放的
-            if (adapter.getOldHolder() != null) {
-                if (adapter.getAnimator() != null) {
-                    adapter.getAnimator().end();
-                }
+            if (adapter.getOldHolder() != null && adapter.getAnimator() != null) {
+                adapter.getAnimator().end();
                 adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
                 adapter.getOldHolder().order.setVisibility(View.VISIBLE);
             }
@@ -212,8 +210,11 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             updateProgress.cancel(true);
             updateProgress = null;
         }
-        adapter.getAnimator().pause();
-        adapter.setAnimator(null);
+        adapter.setOld_holder(null);
+        if (adapter.getAnimator() != null) {
+            adapter.getAnimator().pause();
+            adapter.setAnimator(null);
+        }
         super.onPause();
     }
 }

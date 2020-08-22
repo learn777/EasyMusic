@@ -78,8 +78,6 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
                         holder.viewStub.inflate();// 第二次加载会抛出异常
                     } catch (Exception e) {
                         holder.viewStub.setVisibility(View.VISIBLE);
-                    } finally {
-                        holder.toys = holder.itemView.findViewById(R.id.stub_icon);
                     }
                     holder.order.setVisibility(View.INVISIBLE);
                     SongListViewModel.setCurrent(holder.getAdapterPosition(), OperationFrom.BOTTOM_BAR);
@@ -101,7 +99,10 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
                 holder.viewStub.inflate();
             } catch (Exception e) {
                 holder.viewStub.setVisibility(View.VISIBLE);
+            } finally {
+                holder.toys = holder.itemView.findViewById(R.id.stub_icon);
             }
+            setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
             old_holder = holder;
         }
     }
