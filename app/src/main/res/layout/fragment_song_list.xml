@@ -20,7 +20,6 @@
             android:id="@+id/song_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="#98D53131"
             android:overScrollMode="ifContentScrolls">
 
         </androidx.recyclerview.widget.RecyclerView>

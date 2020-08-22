@@ -1,6 +1,7 @@
 package com.pp.neteasemusic.ui.songlist;
 
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.LayoutInflater;
@@ -151,6 +152,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             //改变原本播放的
             if (adapter.getOldHolder() != null && adapter.getAnimator() != null) {
                 adapter.getAnimator().end();
+                adapter.getOldHolder().cardView.setCardBackgroundColor(Color.WHITE);
                 adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
                 adapter.getOldHolder().order.setVisibility(View.VISIBLE);
             }
@@ -161,13 +163,14 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             holder = (SongsListAdapter.ViewHolder) binding.songList.findViewHolderForAdapterPosition(SongListViewModel.getCurrent());
             System.out.println("findViewHolderForLayoutPosition::" + SongListViewModel.getCurrent());
             if (holder != null) {
-                holder.order.setVisibility(View.INVISIBLE);
                 try {
                     holder.viewStub.inflate();
                 } catch (Exception e) {
                     holder.viewStub.setVisibility(View.VISIBLE);
                 } finally {
+                    holder.order.setVisibility(View.INVISIBLE);
                     holder.toys = holder.itemView.findViewById(R.id.stub_icon);
+                    holder.cardView.setCardBackgroundColor(0x88888888);
                 }
                 adapter.setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
                 adapter.setOld_holder(holder);
@@ -206,6 +209,12 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
     public void onPause() {
         System.out.println("onPause ");
         SongListViewModel.setSongListFragmentState(false);
+        if (adapter.getOldHolder() != null) {
+            adapter.getOldHolder().cardView.setCardBackgroundColor(Color.WHITE);
+            adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
+            adapter.getOldHolder().order.setVisibility(View.VISIBLE);
+        }
+
         if (updateProgress != null) {
             updateProgress.cancel(true);
             updateProgress = null;
@@ -213,6 +222,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         adapter.setOld_holder(null);
         if (adapter.getAnimator() != null) {
             adapter.getAnimator().pause();
+            adapter.getAnimator().end();
             adapter.setAnimator(null);
         }
         super.onPause();
