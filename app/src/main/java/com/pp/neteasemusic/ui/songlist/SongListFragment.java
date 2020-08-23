@@ -152,7 +152,8 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             //改变原本播放的
             if (adapter.getOldHolder() != null && adapter.getAnimator() != null) {
                 adapter.getAnimator().end();
-                adapter.getOldHolder().cardView.setCardBackgroundColor(Color.WHITE);
+                adapter.getOldHolder().song_name.setTextColor(adapter.getColorStateList());
+                adapter.getOldHolder().song_duration.setTextColor(adapter.getColorStateList());
                 adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
                 adapter.getOldHolder().order.setVisibility(View.VISIBLE);
             }
@@ -170,7 +171,8 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 } finally {
                     holder.order.setVisibility(View.INVISIBLE);
                     holder.toys = holder.itemView.findViewById(R.id.stub_icon);
-                    holder.cardView.setCardBackgroundColor(0x88888888);
+                    holder.song_name.setTextColor(Color.RED);
+                    holder.song_duration.setTextColor(Color.RED);
                 }
                 adapter.setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
                 adapter.setOld_holder(holder);
@@ -210,7 +212,8 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         System.out.println("onPause ");
         SongListViewModel.setSongListFragmentState(false);
         if (adapter.getOldHolder() != null) {
-            adapter.getOldHolder().cardView.setCardBackgroundColor(Color.WHITE);
+            adapter.getOldHolder().song_name.setTextColor(adapter.getColorStateList());
+            adapter.getOldHolder().song_duration.setTextColor(adapter.getColorStateList());
             adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
             adapter.getOldHolder().order.setVisibility(View.VISIBLE);
         }

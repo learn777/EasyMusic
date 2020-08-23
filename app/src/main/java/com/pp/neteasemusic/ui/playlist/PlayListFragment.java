@@ -82,7 +82,7 @@ public class PlayListFragment extends Fragment implements View.OnClickListener {
             ClipData clipData = clipboardManager.getPrimaryClip();
             if (clipData != null) {
                 CharSequence charSequence = clipData.getItemAt(0).getText();
-                if (charSequence == null) return null;
+                if (charSequence == null || charSequence.equals("")) return null;
                 clip = charSequence.toString();
                 System.out.println("****************************************");
                 System.out.println(clip);

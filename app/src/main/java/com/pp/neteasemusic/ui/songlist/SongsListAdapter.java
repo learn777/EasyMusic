@@ -2,6 +2,7 @@ package com.pp.neteasemusic.ui.songlist;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,8 +26,12 @@ import java.util.Objects;
 
 public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.ViewHolder> {
     private ViewHolder old_holder = null;
-
+    private ColorStateList colorStateList = null;
     private ObjectAnimator animator = null;
+
+    public ColorStateList getColorStateList() {
+        return colorStateList;
+    }
 
     ObjectAnimator getAnimator() {
         return animator;
@@ -62,7 +66,7 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final ViewHolder holder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_songs_list, parent, false));
-
+        colorStateList = holder.song_name.getTextColors();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +76,8 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
                 if (SongListViewModel.isClickAble() || !Objects.requireNonNull(SongListViewModel.getMusicInfo().getValue()).getId().equals(Objects.requireNonNull(SongListViewModel.getSongsList().getValue()).getResult().getTracks().get(holder.getAdapterPosition()).getId()) || SongListViewModel.getMusicInfo().getValue() == null) {
                     SongListViewModel.setClickAble(false);
                     if (old_holder != null) {
-                        old_holder.cardView.setCardBackgroundColor(Color.WHITE);
+                        old_holder.song_name.setTextColor(colorStateList);
+                        old_holder.song_duration.setTextColor(colorStateList);
                         old_holder.viewStub.setVisibility(View.INVISIBLE);
                         old_holder.order.setVisibility(View.VISIBLE);
                     }
@@ -105,7 +110,8 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
             } finally {
                 holder.toys = holder.itemView.findViewById(R.id.stub_icon);
             }
-            holder.cardView.setCardBackgroundColor(0x88888888);
+            holder.song_name.setTextColor(Color.RED);
+            holder.song_duration.setTextColor(Color.RED);
             setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
             old_holder = holder;
         }
@@ -133,14 +139,13 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
         TextView order, song_duration, song_name;
         ImageView toys;
         ViewStub viewStub;
-        CardView cardView;
+
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             order = itemView.findViewById(R.id.order);
             song_name = itemView.findViewById(R.id.song_name);
             song_duration = itemView.findViewById(R.id.song_duration);
             viewStub = itemView.findViewById(R.id.viewStub);
-            cardView = itemView.findViewById(R.id.cardView_songlist);
         }
     }
 }
