@@ -83,6 +83,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+        binding.locationOn.setOnClickListener(this);
         return binding.getRoot();
     }
 
@@ -125,6 +126,17 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_play:
                 SongListViewModel.pressPlay(OperationFrom.BOTTOM_BAR);
                 break;
+            case R.id.location_on:
+                if (SongListViewModel.getCurrent() > -1 && SongListViewModel.getSongsList().getValue() != null && SongListViewModel.getMusicInfo().getValue() != null) {
+                    if (SongListViewModel.getSongsList().getValue().getResult().getTracks().get(SongListViewModel.getCurrent()).getId().equals(SongListViewModel.getMusicInfo().getValue().getId())) {
+                        LinearLayoutManager layoutManager = (LinearLayoutManager) binding.songList.getLayoutManager();
+                        if (layoutManager != null && (SongListViewModel.getCurrent() < layoutManager.findFirstVisibleItemPosition() || SongListViewModel.getCurrent() >= layoutManager.findLastVisibleItemPosition())) {
+                            int scrollTO = layoutManager.findFirstVisibleItemPosition();
+                            scrollTO = scrollTO > SongListViewModel.getCurrent() ? SongListViewModel.getCurrent() - layoutManager.getChildCount() / 2 : SongListViewModel.getCurrent() + layoutManager.getChildCount() / 2;
+                            binding.songList.smoothScrollToPosition(scrollTO);
+                        }
+                    }
+                }
         }
     }
 
