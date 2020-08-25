@@ -59,15 +59,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/song_name"
                 tools:text="3:00" />
 
-            <ViewStub
-                android:id="@+id/viewStub"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout="@layout/cell_song_list_view_stub"
+            <ImageView
+                android:id="@+id/icon_flover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_toys_green_24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,6 +65,7 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final ViewHolder holder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_songs_list, parent, false));
+        //获取TextView默认文字颜色
         colorStateList = holder.song_name.getTextColors();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,16 +78,10 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
                     if (old_holder != null) {
                         old_holder.song_name.setTextColor(colorStateList);
                         old_holder.song_duration.setTextColor(colorStateList);
-                        old_holder.viewStub.setVisibility(View.INVISIBLE);
+                        old_holder.setToys(View.INVISIBLE);
                         old_holder.order.setVisibility(View.VISIBLE);
                     }
                     old_holder = holder;
-                    try {
-                        holder.viewStub.inflate();// 第二次加载会抛出异常
-                    } catch (Exception e) {
-                        holder.viewStub.setVisibility(View.VISIBLE);
-                    }
-                    holder.order.setVisibility(View.INVISIBLE);
                     SongListViewModel.setCurrent(holder.getAdapterPosition(), OperationFrom.BOTTOM_BAR);
                 }
             }
@@ -101,20 +95,7 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
         holder.order.setText(String.valueOf(position + 1));
         holder.song_name.setText(getCurrentList().get(position).getName());
         holder.song_duration.setText(TimeUtils.timeFormat(getCurrentList().get(position).getDuration()));
-        if (SongListViewModel.getMusicInfo().getValue() != null && SongListViewModel.getSongsList().getValue() != null && SongListViewModel.getMusicInfo().getValue().getId().equals(SongListViewModel.getSongsList().getValue().getResult().getTracks().get(position).getId())) {
-            holder.order.setVisibility(View.INVISIBLE);
-            try {
-                holder.viewStub.inflate();
-            } catch (Exception e) {
-                holder.viewStub.setVisibility(View.VISIBLE);
-            } finally {
-                holder.toys = holder.itemView.findViewById(R.id.stub_icon);
-            }
-            holder.song_name.setTextColor(Color.RED);
-            holder.song_duration.setTextColor(Color.RED);
-            setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
-            old_holder = holder;
-        }
+
     }
 
     @Override
@@ -131,6 +112,18 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
         return old_holder;
     }
 
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        if (SongListViewModel.getMusicInfo().getValue() != null && SongListViewModel.getSongsList().getValue() != null && SongListViewModel.getMusicInfo().getValue().getId().equals(SongListViewModel.getSongsList().getValue().getResult().getTracks().get(holder.getAdapterPosition()).getId())) {
+            holder.order.setVisibility(View.INVISIBLE);
+            holder.song_name.setTextColor(Color.RED);
+            holder.song_duration.setTextColor(Color.RED);
+            holder.setToys(View.VISIBLE);
+            setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
+            old_holder = holder;
+        }
+    }
+
     void setOld_holder(ViewHolder old_holder) {
         this.old_holder = old_holder;
     }
@@ -138,14 +131,26 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView order, song_duration, song_name;
         ImageView toys;
-        ViewStub viewStub;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             order = itemView.findViewById(R.id.order);
-            song_name = itemView.findViewById(R.id.song_name);
             song_duration = itemView.findViewById(R.id.song_duration);
-            viewStub = itemView.findViewById(R.id.viewStub);
+            song_name = itemView.findViewById(R.id.song_name);
+        }
+
+        public ImageView getToys() {
+            if (toys == null) {
+                toys = itemView.findViewById(R.id.icon_flover);
+            }
+            return toys;
+        }
+
+        void setToys(int visible) {
+            if (toys == null) {
+                toys = itemView.findViewById(R.id.icon_flover);
+            }
+            toys.setVisibility(visible);
         }
     }
 }

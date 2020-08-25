@@ -110,6 +110,10 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 updateSongList(false);
             }
         });
+        binding.songList.setHasFixedSize(true);
+        binding.songList.setItemViewCacheSize(20);
+        binding.songList.setDrawingCacheEnabled(true);
+        binding.songList.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     @Override
@@ -162,11 +166,13 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
     private void updateSongList(boolean scrollToTop) {
         if (SongListViewModel.getCurrent() >= 0) {
             //改变原本播放的
-            if (adapter.getOldHolder() != null && adapter.getAnimator() != null) {
-                adapter.getAnimator().end();
+            if (adapter.getOldHolder() != null) {
+                if (adapter.getAnimator() != null) {
+                    adapter.getAnimator().end();
+                }
                 adapter.getOldHolder().song_name.setTextColor(adapter.getColorStateList());
                 adapter.getOldHolder().song_duration.setTextColor(adapter.getColorStateList());
-                adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
+                adapter.getOldHolder().setToys(View.INVISIBLE);
                 adapter.getOldHolder().order.setVisibility(View.VISIBLE);
             }
 
@@ -176,16 +182,10 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             holder = (SongsListAdapter.ViewHolder) binding.songList.findViewHolderForAdapterPosition(SongListViewModel.getCurrent());
             System.out.println("findViewHolderForLayoutPosition::" + SongListViewModel.getCurrent());
             if (holder != null) {
-                try {
-                    holder.viewStub.inflate();
-                } catch (Exception e) {
-                    holder.viewStub.setVisibility(View.VISIBLE);
-                } finally {
-                    holder.order.setVisibility(View.INVISIBLE);
-                    holder.toys = holder.itemView.findViewById(R.id.stub_icon);
-                    holder.song_name.setTextColor(Color.RED);
-                    holder.song_duration.setTextColor(Color.RED);
-                }
+                holder.order.setVisibility(View.INVISIBLE);
+                holder.setToys(View.VISIBLE);
+                holder.song_name.setTextColor(Color.RED);
+                holder.song_duration.setTextColor(Color.RED);
                 adapter.setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
                 adapter.setOld_holder(holder);
             }
@@ -226,7 +226,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         if (adapter.getOldHolder() != null) {
             adapter.getOldHolder().song_name.setTextColor(adapter.getColorStateList());
             adapter.getOldHolder().song_duration.setTextColor(adapter.getColorStateList());
-            adapter.getOldHolder().viewStub.setVisibility(View.INVISIBLE);
+            adapter.getOldHolder().setToys(View.INVISIBLE);
             adapter.getOldHolder().order.setVisibility(View.VISIBLE);
         }
 
