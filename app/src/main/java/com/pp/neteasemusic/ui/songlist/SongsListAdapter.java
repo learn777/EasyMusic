@@ -95,11 +95,10 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
         holder.order.setText(String.valueOf(position + 1));
         holder.song_name.setText(getCurrentList().get(position).getName());
         holder.song_duration.setText(TimeUtils.timeFormat(getCurrentList().get(position).getDuration()));
-
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public long getItemId(int position) {
         return position;
     }
 
@@ -121,6 +120,11 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
             holder.setToys(View.VISIBLE);
             setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
             old_holder = holder;
+        } else {
+            holder.order.setVisibility(View.VISIBLE);
+            holder.song_name.setTextColor(colorStateList);
+            holder.song_duration.setTextColor(colorStateList);
+            holder.setToys(View.INVISIBLE);
         }
     }
 

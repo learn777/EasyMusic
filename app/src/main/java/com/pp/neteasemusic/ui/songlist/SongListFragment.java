@@ -1,6 +1,7 @@
 package com.pp.neteasemusic.ui.songlist;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -15,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.pp.neteasemusic.R;
@@ -47,9 +50,6 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         System.out.println("onCreateView ");
         binding = FragmentSongListBinding.inflate(inflater, container, false);
         RoomManager.setRefreshLayout(binding.swiperefreshlayout);
-        binding.songList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new SongsListAdapter();
-        binding.songList.setAdapter(adapter);
         binding.swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -90,6 +90,15 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
+        binding.songList.setLayoutManager(linearLayoutManager);
+        setScrollTime(requireContext(), linearLayoutManager, 20);
+        binding.songList.setHasFixedSize(true);
+        binding.songList.setDrawingCacheEnabled(true);
+        binding.songList.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        adapter = new SongsListAdapter();
+        adapter.setHasStableIds(true);
+        binding.songList.setAdapter(adapter);
         new ViewModelProvider(this).get(SongListViewModel.class);
         //当前播放列表发生改变后的操作
         SongListViewModel.getSongsList().observe(getViewLifecycleOwner(), new Observer<NeteaseResult>() {
@@ -110,10 +119,6 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 updateSongList(false);
             }
         });
-        binding.songList.setHasFixedSize(true);
-        binding.songList.setItemViewCacheSize(20);
-        binding.songList.setDrawingCacheEnabled(true);
-        binding.songList.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     @Override
@@ -175,7 +180,12 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 adapter.getOldHolder().setToys(View.INVISIBLE);
                 adapter.getOldHolder().order.setVisibility(View.VISIBLE);
             }
-
+            LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(getContext()) {
+                @Override
+                protected int calculateTimeForScrolling(int dx) {
+                    return super.calculateTimeForScrolling(dx);
+                }
+            };
             //改变现在播放的
             System.out.println("SongListViewModel.getCurrent()::" + SongListViewModel.getCurrent());
             SongsListAdapter.ViewHolder holder;
@@ -241,5 +251,16 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             adapter.setAnimator(null);
         }
         super.onPause();
+    }
+
+    private void setScrollTime(Context context, RecyclerView.LayoutManager layoutManager, final int scale) {
+        LinearSmoothScroller smoothScroller = new LinearSmoothScroller(context) {
+            @Override
+            protected int calculateTimeForScrolling(int dx) {
+                return super.calculateTimeForScrolling(dx) * scale;
+            }
+        };
+        smoothScroller.setTargetPosition(0);
+        layoutManager.startSmoothScroll(smoothScroller);
     }
 }

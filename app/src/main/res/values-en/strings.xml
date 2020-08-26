@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">简易云音乐</string>
+    <string name="tab_text_1">PlayList</string>
+    <string name="tab_text_2">SongList</string>
+    <string name="SONGS_LIST_NAME">Please choose a playlist</string>
+    <string name="BTN_PRE">previous</string>
+    <string name="BTN_PLAY">play</string>
+    <string name="BTN_NEXT">next</string>
+    <string name="SONG_NAME">unknown</string>
+    <string name="POPUP_DELETE">delete</string>
+    <string name="POPUP_UPDATE">refresh</string>
+    <string name="POPUP_CANCEL">cancel</string>
+    <string name="LEFT_LABEL_GAME">Game</string>
+    <string name="LEFT_LABEL_MUSIC">Music</string>
+</resources>
