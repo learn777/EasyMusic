@@ -1,6 +1,7 @@
 package com.pp.neteasemusic.ui.playlist;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,14 +71,22 @@ public class PlayListAdapter extends ListAdapter<PlayList, PlayListAdapter.PlayL
 
     @Override
     public void onBindViewHolder(@NonNull final PlayListViewHolder holder, final int position) {
-        int px = (int) (RoomManager.getDisplayMetrics().widthPixels / 2 + 0.5 - ScreenSizeUtils.dip2px(4));
+        final int px = (int) (RoomManager.getDisplayMetrics().widthPixels / 2 + 0.5 - ScreenSizeUtils.dip2px(4));
         VolleySingleton.getInstance(RoomManager.getContext()).add(new ImageRequest(getCurrentList().get(position).getCover(), new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
-                holder.cover.setImageBitmap(response);
                 holder.name.setText(getCurrentList().get(position).getName());
+                if (response.getWidth() < px) {
+                    float scale = ((float) px) / response.getWidth();
+                    Matrix matrix = new Matrix();
+                    matrix.postScale(scale, scale);
+                    Bitmap tmp = Bitmap.createBitmap(response, 0, 0, response.getWidth(), response.getHeight(), matrix, true);
+                    holder.cover.setImageBitmap(tmp);
+                    return;
+                }
+                holder.cover.setImageBitmap(response);
             }
-        }, px, px, ImageView.ScaleType.CENTER_INSIDE, Bitmap.Config.RGB_565, null));
+        }, px, px, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565, null));
 //        holder.cover.setOnLongClick(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

@@ -1,6 +1,7 @@
 package com.pp.neteasemusic.ui.songlist;
 
 import android.os.RemoteException;
+import android.util.Log;
 import android.util.LruCache;
 
 import androidx.lifecycle.MutableLiveData;
@@ -16,6 +17,8 @@ import com.pp.neteasemusic.netease.utils.NetworkCheckUtils;
 import com.pp.neteasemusic.netease.utils.OperationFrom;
 import com.pp.neteasemusic.netease.utils.ToastUtils;
 
+import org.apache.lucene.util.RamUsageEstimator;
+
 import java.util.Objects;
 
 public class SongListViewModel extends ViewModel {
@@ -25,7 +28,13 @@ public class SongListViewModel extends ViewModel {
     private static int current = -1; //当前播放歌曲在列表中的坐标
     private static boolean clickAble = true;    //在更新歌曲列表后能否点击更新前的相同选项
     private static boolean SONG_LIST_FRAGMENT_STATE = true; //当前活动状态true为前台，false为后台
-    private static LruCache<String, NeteaseResult> mCache = new LruCache<>(10 * 1024);
+    private static LruCache<String, NeteaseResult> mCache = new LruCache<String, NeteaseResult>(4 * 1024 * 1024) {
+        @Override
+        protected int sizeOf(String key, NeteaseResult value) {
+            Log.e("RamUsageEstimator--->", String.valueOf(RamUsageEstimator.sizeOf(value)));
+            return (int) RamUsageEstimator.sizeOf(value);
+        }
+    };
 
     public static LruCache<String, NeteaseResult> getmCache() {
         return mCache;

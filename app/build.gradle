@@ -47,4 +47,5 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation files("libs/classes.jar")
+    implementation 'org.apache.lucene:lucene-core:4.0.0'
 }
