@@ -1,6 +1,7 @@
 package com.pp.neteasemusic.ui.songlist;
 
 import android.os.RemoteException;
+import android.util.LruCache;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -24,6 +25,11 @@ public class SongListViewModel extends ViewModel {
     private static int current = -1; //当前播放歌曲在列表中的坐标
     private static boolean clickAble = true;    //在更新歌曲列表后能否点击更新前的相同选项
     private static boolean SONG_LIST_FRAGMENT_STATE = true; //当前活动状态true为前台，false为后台
+    private static LruCache<String, NeteaseResult> mCache = new LruCache<>(10 * 1024);
+
+    public static LruCache<String, NeteaseResult> getmCache() {
+        return mCache;
+    }
 
     public SongListViewModel() {
 //        自动获取歌单
@@ -120,10 +126,11 @@ public class SongListViewModel extends ViewModel {
     }
 
     public static void fetch_Data() {
-        if (!NetworkCheckUtils.checkNet()) {
+        if (mCache.get(DataRequest.getPlayListID()) != null) {
+            getSongsList().postValue(mCache.get(DataRequest.getPlayListID()));
+        } else if (!NetworkCheckUtils.checkNet()) {
             ToastUtils.ToastNoAppName("网络不可用").show();
             RoomManager.getRefreshLayout().setRefreshing(false);
-            return;
         } else {
             DataRequest.getPlayListResult(RoomManager.getContext(), songList);
         }

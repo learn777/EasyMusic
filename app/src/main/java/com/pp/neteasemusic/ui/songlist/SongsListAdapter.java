@@ -95,6 +95,19 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
         holder.order.setText(String.valueOf(position + 1));
         holder.song_name.setText(getCurrentList().get(position).getName());
         holder.song_duration.setText(TimeUtils.timeFormat(getCurrentList().get(position).getDuration()));
+        if (SongListViewModel.getCurrent() == position && Objects.requireNonNull(SongListViewModel.getMusicInfo().getValue()).getId().equals(Objects.requireNonNull(SongListViewModel.getSongsList().getValue()).getResult().getTracks().get(holder.getAdapterPosition()).getId())) {
+            holder.order.setVisibility(View.INVISIBLE);
+            holder.song_name.setTextColor(Color.RED);
+            holder.song_duration.setTextColor(Color.RED);
+            holder.setToys(View.VISIBLE);
+            setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
+            old_holder = holder;
+        } else {
+            holder.order.setVisibility(View.VISIBLE);
+            holder.song_name.setTextColor(colorStateList);
+            holder.song_duration.setTextColor(colorStateList);
+            holder.setToys(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -109,23 +122,6 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
 
     ViewHolder getOldHolder() {
         return old_holder;
-    }
-
-    @Override
-    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-        if (SongListViewModel.getMusicInfo().getValue() != null && SongListViewModel.getSongsList().getValue() != null && SongListViewModel.getMusicInfo().getValue().getId().equals(SongListViewModel.getSongsList().getValue().getResult().getTracks().get(holder.getAdapterPosition()).getId())) {
-            holder.order.setVisibility(View.INVISIBLE);
-            holder.song_name.setTextColor(Color.RED);
-            holder.song_duration.setTextColor(Color.RED);
-            holder.setToys(View.VISIBLE);
-            setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
-            old_holder = holder;
-        } else {
-            holder.order.setVisibility(View.VISIBLE);
-            holder.song_name.setTextColor(colorStateList);
-            holder.song_duration.setTextColor(colorStateList);
-            holder.setToys(View.INVISIBLE);
-        }
     }
 
     void setOld_holder(ViewHolder old_holder) {

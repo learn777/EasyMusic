@@ -105,7 +105,9 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onChanged(NeteaseResult neteaseResult) {
                 binding.textView.setText(neteaseResult.getResult().getName());
+                adapter = new SongsListAdapter();
                 adapter.submitList(neteaseResult.getResult().getTracks());
+                binding.songList.setAdapter(adapter);
                 binding.swiperefreshlayout.setRefreshing(false);
                 updateSongList(true);
             }
@@ -191,7 +193,8 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             SongsListAdapter.ViewHolder holder;
             holder = (SongsListAdapter.ViewHolder) binding.songList.findViewHolderForAdapterPosition(SongListViewModel.getCurrent());
             System.out.println("findViewHolderForLayoutPosition::" + SongListViewModel.getCurrent());
-            if (holder != null) {
+            if (holder != null && Objects.requireNonNull(SongListViewModel.getSongsList().getValue()).getResult().getTracks().get(SongListViewModel.getCurrent()).getId().equals(Objects.requireNonNull(SongListViewModel.getMusicInfo().getValue()).getId())) {
+                System.out.println("findViewHolderInIf::" + SongListViewModel.getCurrent());
                 holder.order.setVisibility(View.INVISIBLE);
                 holder.setToys(View.VISIBLE);
                 holder.song_name.setTextColor(Color.RED);
