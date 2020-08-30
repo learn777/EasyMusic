@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import com.pp.neteasemusic.IMusicController;
 import com.pp.neteasemusic.netease.utils.OperationFrom;
 import com.pp.neteasemusic.netease.utils.ToastUtils;
-import com.pp.neteasemusic.ui.songlist.SongListViewModel;
+import com.pp.neteasemusic.ui.music.songlist.SongListViewModel;
 
 import java.io.IOException;
 

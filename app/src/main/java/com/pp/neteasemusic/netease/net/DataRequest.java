@@ -13,7 +13,7 @@ import com.pp.neteasemusic.netease.json.NeteaseResult;
 import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.utils.ToastUtils;
 import com.pp.neteasemusic.netease.volley.VolleySingleton;
-import com.pp.neteasemusic.ui.songlist.SongListViewModel;
+import com.pp.neteasemusic.ui.music.songlist.SongListViewModel;
 
 
 /**

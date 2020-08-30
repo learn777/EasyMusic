@@ -1,4 +1,4 @@
-package com.pp.neteasemusic.ui.home;
+package com.pp.neteasemusic.ui.music;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,10 +16,10 @@ import com.pp.neteasemusic.databinding.FragmentHomeBinding;
 import com.pp.neteasemusic.netease.notification.NeteaseNotification;
 import com.pp.neteasemusic.netease.room.RoomManager;
 
-public class homeFragment extends Fragment {
+public class MusicFragment extends Fragment {
     private FragmentHomeBinding binding;
 
-    public homeFragment() {
+    public MusicFragment() {
         // Required empty public constructor
     }
 

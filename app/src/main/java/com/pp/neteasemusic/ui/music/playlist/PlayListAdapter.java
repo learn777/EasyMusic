@@ -1,4 +1,4 @@
-package com.pp.neteasemusic.ui.playlist;
+package com.pp.neteasemusic.ui.music.playlist;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -23,7 +23,7 @@ import com.pp.neteasemusic.netease.room.PlayList;
 import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.utils.ScreenSizeUtils;
 import com.pp.neteasemusic.netease.volley.VolleySingleton;
-import com.pp.neteasemusic.ui.songlist.SongListViewModel;
+import com.pp.neteasemusic.ui.music.songlist.SongListViewModel;
 
 import java.util.List;
 

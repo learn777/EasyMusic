@@ -1,4 +1,4 @@
-package com.pp.neteasemusic.ui.other;
+package com.pp.neteasemusic.ui.video;
 
 import android.animation.TypeEvaluator;
 import android.graphics.Point;

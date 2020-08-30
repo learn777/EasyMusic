@@ -1,4 +1,4 @@
-package com.pp.neteasemusic.ui.other;
+package com.pp.neteasemusic.ui.video;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -19,10 +19,10 @@ import com.pp.neteasemusic.databinding.FragmentOtherBinding;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OtherFragment extends Fragment {
+public class VideoFragment extends Fragment {
     FragmentOtherBinding binding;
 
-    public OtherFragment() {
+    public VideoFragment() {
         // Required empty public constructor
     }
 

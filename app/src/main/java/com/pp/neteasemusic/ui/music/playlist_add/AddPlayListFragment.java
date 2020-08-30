@@ -1,4 +1,4 @@
-package com.pp.neteasemusic.ui.playlist_add;
+package com.pp.neteasemusic.ui.music.playlist_add;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

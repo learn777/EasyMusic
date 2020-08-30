@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.pp.neteasemusic.ui.playlist.PlayListFragment;
-import com.pp.neteasemusic.ui.playlist_add.AddPlayListFragment;
-import com.pp.neteasemusic.ui.songlist.SongListFragment;
+import com.pp.neteasemusic.ui.music.playlist.PlayListFragment;
+import com.pp.neteasemusic.ui.music.playlist_add.AddPlayListFragment;
+import com.pp.neteasemusic.ui.music.songlist.SongListFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

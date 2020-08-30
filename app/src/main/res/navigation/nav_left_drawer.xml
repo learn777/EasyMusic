@@ -7,11 +7,11 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.pp.neteasemusic.ui.home.homeFragment"
+        android:name="com.pp.neteasemusic.ui.music.MusicFragment"
         android:label="homeFragment" />
     <fragment
         android:id="@+id/otherFragment"
-        android:name="com.pp.neteasemusic.ui.other.OtherFragment"
+        android:name="com.pp.neteasemusic.ui.video.VideoFragment"
         android:label="fragment_other"
         tools:layout="@layout/fragment_other" />
 </navigation>

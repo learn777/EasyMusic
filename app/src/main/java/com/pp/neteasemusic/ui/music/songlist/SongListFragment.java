@@ -1,4 +1,4 @@
-package com.pp.neteasemusic.ui.songlist;
+package com.pp.neteasemusic.ui.music.songlist;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.pp.neteasemusic.netease.utils.OperationFrom;
-import com.pp.neteasemusic.ui.songlist.SongListViewModel;
+import com.pp.neteasemusic.ui.music.songlist.SongListViewModel;
 
 import java.util.Objects;
 

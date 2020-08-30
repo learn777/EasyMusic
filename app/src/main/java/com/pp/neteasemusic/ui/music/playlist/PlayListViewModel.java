@@ -1,4 +1,4 @@
-package com.pp.neteasemusic.ui.playlist;
+package com.pp.neteasemusic.ui.music.playlist;
 
 import android.app.Application;
 
