@@ -48,4 +48,5 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation files("libs/classes.jar")
     implementation 'org.apache.lucene:lucene-core:4.0.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.8.1'
 }

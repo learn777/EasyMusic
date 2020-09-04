@@ -1,26 +1,25 @@
 package com.pp.neteasemusic.ui.video;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
-import android.graphics.Point;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.pp.neteasemusic.databinding.FragmentOtherBinding;
+import com.pp.neteasemusic.databinding.FragmentVideoBinding;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class VideoFragment extends Fragment {
-    FragmentOtherBinding binding;
+    private FragmentVideoBinding binding;
+    private VideoViewModel videoViewModel;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -28,50 +27,52 @@ public class VideoFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentOtherBinding.inflate(inflater, container, false);
+        binding = FragmentVideoBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //控制点，二阶贝塞尔曲线需要三个点，目前只有两个，所以需要新增一个
-                Point startPoint = new Point(0, binding.getRoot().getHeight() / 2);
-                Point endPoint = new Point(binding.getRoot().getWidth() - binding.tvOther.getWidth(), binding.getRoot().getHeight() / 2);
-                int pointX = (startPoint.x + endPoint.x) / 2;
-                int pointY = (int) (startPoint.y / 2);
-                Point controlPoint = new Point(pointX, pointY);
-                BezierEvaluator bezierEvaluator = new BezierEvaluator(controlPoint);
-                ValueAnimator anim = ValueAnimator.ofObject(bezierEvaluator, startPoint, endPoint);
-                anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        Point point = (Point) valueAnimator.getAnimatedValue();
-                        //              设置相对于屏幕的原点
-                        binding.tvOther.setX(point.x);
-                        binding.tvOther.setY(point.y);
-                        binding.tvOther.invalidate();
-                    }
-                });
-                anim.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        int x = (binding.getRoot().getWidth() - binding.tvOther.getWidth()) / 2;
-                        binding.tvOther.setX(x);
-                    }
-                });
-                anim.setDuration(1500);
-                anim.setInterpolator(new AccelerateDecelerateInterpolator());
-                anim.start();
-            }
-        });
+        videoViewModel = new ViewModelProvider(requireActivity()).get(VideoViewModel.class);
+        videoViewModel.binding = binding;
+        String url = "https://gss3.baidu.com/6LZ0ej3k1Qd3ote6lo7D0j9wehsv/tieba-smallvideo/60_bdd34c3e3e76f86a157cb01c3fa82771.mp4";
+        videoViewModel.initPlayer();
+        videoViewModel.loadPlayer(url);
+        binding.playerView.setPlayer(videoViewModel.player);
+        if (binding.playerView.getController().getFullScreen() != null) {
+            binding.playerView.getController().getFullScreen().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
+            });
+        }
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        videoViewModel.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        videoViewModel.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        videoViewModel.player.release();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

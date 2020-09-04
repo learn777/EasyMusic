@@ -73,6 +73,11 @@ public class PlayListFragment extends Fragment implements View.OnClickListener {
             return;
         }
         insertPlay(v);
+//        PopupWindow popupWindow = new PopupWindow(LayoutInflater.from(getContext()).inflate(R.layout.cell_poupwindow,null), RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+//        popupWindow.setAnimationStyle();
+//        popupWindow.showAsDropDown(binding.fab);
+
+
     }
 
     private String getClipPlaylistID() {

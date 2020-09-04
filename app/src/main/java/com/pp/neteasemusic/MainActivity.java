@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 
@@ -20,9 +21,6 @@ import com.pp.neteasemusic.netease.receiver.NetEaseReceiver;
 import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.service.MusicService;
 import com.pp.utils.StatusBarUtils;
-
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.SoftReference;
 
 public class MainActivity extends AppCompatActivity {
     NavController controller;
@@ -46,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
-        SoftReference<String> softReference = new SoftReference<>("", new ReferenceQueue<String>());
         StatusBarUtils.setBarTranslucent(this, true);
         StatusBarUtils.setStatusBarFontColor(this, false);
         setContentView(binding.getRoot());
@@ -84,5 +81,14 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(receiver);
         unbindService(connection);
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
