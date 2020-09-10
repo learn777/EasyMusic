@@ -41,80 +41,7 @@ public class VideoViewModel extends ViewModel {
         TrackSelection.Factory factory = new AdaptiveTrackSelection.Factory(new DefaultBandwidthMeter());
         TrackSelector trackSelector = new DefaultTrackSelector(factory);
         player = ExoPlayerFactory.newSimpleInstance(binding.getRoot().getContext(), trackSelector);
-        player.addListener(new Player.EventListener() {
-            @Override
-            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-                Log.d("hello", "onTimelineChanged");
-            }
-
-            @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-                Log.d("hello", "onTracksChanged");
-            }
-
-            @Override
-            public void onLoadingChanged(boolean isLoading) {
-                Log.d("hello", "onLoadingChanged");
-            }
-
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                Log.d("hello", "onPlayerStateChanged: playWhenReady = " + String.valueOf(playWhenReady)
-                        + " playbackState = " + playbackState);
-                switch (playbackState) {
-                    case Player.STATE_ENDED:
-                        Log.d("hello", "Playback ended!");
-                        //Stop playback and return to start position
-                        setPlayPause(false);
-                        binding.playerView.setKeepScreenOn(false);
-                        player.seekTo(0);
-                        break;
-                    case Player.STATE_READY:
-                        binding.progressBar.setVisibility(View.GONE);
-                        Log.d("hello", "ExoPlayer ready! pos: " + player.getCurrentPosition()
-                                + " max: " + stringForTime((int) player.getDuration()));
-//                        setProgress(0);
-                        break;
-                    case Player.STATE_BUFFERING:
-                        Log.d("hello", "Playback buffering!");
-                        binding.progressBar.setVisibility(View.VISIBLE);
-                        break;
-                    case Player.STATE_IDLE:
-                        Log.d("hello", "ExoPlayer idle!");
-                        break;
-                }
-            }
-
-            @Override
-            public void onRepeatModeChanged(int repeatMode) {
-
-            }
-
-            @Override
-            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-            }
-
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                Log.d("hello", "onPlaybackError: " + error.getMessage());
-            }
-
-            @Override
-            public void onPositionDiscontinuity(int reason) {
-                Log.d("hello", "onPositionDiscontinuity");
-            }
-
-            @Override
-            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-                Log.d("hello", "MainActivity.onPlaybackParametersChanged." + playbackParameters.toString());
-            }
-
-            @Override
-            public void onSeekProcessed() {
-
-            }
-        });
+        player.addListener(eventListener);
     }
 
     void loadPlayer(String url) {
@@ -158,4 +85,79 @@ public class VideoViewModel extends ViewModel {
         player.setPlayWhenReady(_play);
         binding.playerView.setKeepScreenOn(_play);
     }
+
+    private Player.EventListener eventListener = new Player.EventListener() {
+        @Override
+        public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+            Log.d("hello", "onTimelineChanged");
+        }
+
+        @Override
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+            Log.d("hello", "onTracksChanged");
+        }
+
+        @Override
+        public void onLoadingChanged(boolean isLoading) {
+            Log.d("hello", "onLoadingChanged");
+        }
+
+        @Override
+        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            Log.d("hello", "onPlayerStateChanged: playWhenReady = " + String.valueOf(playWhenReady)
+                    + " playbackState = " + playbackState);
+            switch (playbackState) {
+                case Player.STATE_ENDED:
+                    Log.d("hello", "Playback ended!");
+                    //Stop playback and return to start position
+                    setPlayPause(false);
+                    binding.playerView.setKeepScreenOn(false);
+                    player.seekTo(0);
+                    break;
+                case Player.STATE_READY:
+                    binding.progressBar.setVisibility(View.GONE);
+                    Log.d("hello", "ExoPlayer ready! pos: " + player.getCurrentPosition()
+                            + " max: " + stringForTime((int) player.getDuration()));
+//                        setProgress(0);
+                    break;
+                case Player.STATE_BUFFERING:
+                    Log.d("hello", "Playback buffering!");
+                    binding.progressBar.setVisibility(View.VISIBLE);
+                    break;
+                case Player.STATE_IDLE:
+                    Log.d("hello", "ExoPlayer idle!");
+                    break;
+            }
+        }
+
+        @Override
+        public void onRepeatModeChanged(int repeatMode) {
+
+        }
+
+        @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+        }
+
+        @Override
+        public void onPlayerError(ExoPlaybackException error) {
+            Log.d("hello", "onPlaybackError: " + error.getMessage());
+        }
+
+        @Override
+        public void onPositionDiscontinuity(int reason) {
+            Log.d("hello", "onPositionDiscontinuity");
+        }
+
+        @Override
+        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+            Log.d("hello", "MainActivity.onPlaybackParametersChanged." + playbackParameters.toString());
+        }
+
+        @Override
+        public void onSeekProcessed() {
+
+        }
+    };
 }

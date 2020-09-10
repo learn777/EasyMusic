@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pp.neteasemusic.databinding.FragmentVideoBinding;
@@ -17,7 +20,7 @@ import com.pp.neteasemusic.databinding.FragmentVideoBinding;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VideoFragment extends Fragment {
+public class VideoFragment extends Fragment implements View.OnClickListener {
     private FragmentVideoBinding binding;
     private VideoViewModel videoViewModel;
 
@@ -44,12 +47,7 @@ public class VideoFragment extends Fragment {
         videoViewModel.loadPlayer(url);
         binding.playerView.setPlayer(videoViewModel.player);
         if (binding.playerView.getController().getFullScreen() != null) {
-            binding.playerView.getController().getFullScreen().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                }
-            });
+            binding.playerView.getController().getFullScreen().setOnClickListener(this);
         }
     }
 
@@ -63,16 +61,29 @@ public class VideoFragment extends Fragment {
     public void onResume() {
         super.onResume();
         videoViewModel.onResume();
+        if (requireActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            requireActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        videoViewModel.player.release();
+        videoViewModel.player.release();
     }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if (requireActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 }

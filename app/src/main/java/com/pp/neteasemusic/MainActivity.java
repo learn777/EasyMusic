@@ -5,10 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -87,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             super.onBackPressed();
         }
