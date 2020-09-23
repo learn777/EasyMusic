@@ -5,16 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -57,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         RoomManager.initRoomManager(getApplicationContext());
         RoomManager.setDisplay(getWindowManager().getDefaultDisplay());
         //注册音乐管理服务
-        Intent intent = new Intent("com.pp.neteasemusic.MusicService");
+        Intent intent = new Intent("com.pp.easemusic.MusicService");
         intent.setComponent(new ComponentName(getApplicationContext(), MusicService.class));
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
         //注册通知服务

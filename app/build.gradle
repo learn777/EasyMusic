@@ -49,4 +49,5 @@ dependencies {
     implementation files("libs/classes.jar")
     implementation 'org.apache.lucene:lucene-core:4.0.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.8.1'
+    implementation 'com.jakewharton:disklrucache:2.0.2'
 }
