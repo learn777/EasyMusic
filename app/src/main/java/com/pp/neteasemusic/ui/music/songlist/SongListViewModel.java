@@ -82,7 +82,7 @@ public class SongListViewModel extends ViewModel {
                     current = position;
                     musicInfo.setValue(Objects.requireNonNull(songList.getValue()).getResult().getTracks().get(position));
                 }
-                update.postValue(true);
+                update.setValue(true);
                 break;
             case NOTIFICATION:
             case MUSIC_SERVICE:

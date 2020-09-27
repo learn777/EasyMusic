@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pp.neteasemusic.R;
 import com.pp.neteasemusic.netease.json.MusicInfo;
+import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.utils.OperationFrom;
 import com.pp.neteasemusic.netease.utils.TimeUtils;
 
@@ -28,7 +30,7 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
     private ColorStateList colorStateList = null;
     private ObjectAnimator animator = null;
 
-    public ColorStateList getColorStateList() {
+    ColorStateList getColorStateList() {
         return colorStateList;
     }
 
@@ -36,8 +38,8 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
         return animator;
     }
 
-    void setAnimator(ObjectAnimator animator) {
-        if (animator != null) {
+    void setAnimator(ObjectAnimator animator, boolean isPlay) {
+        if (animator != null && isPlay) {
             animator.setRepeatMode(ValueAnimator.RESTART);
             animator.setRepeatCount(ValueAnimator.INFINITE);
             animator.setInterpolator(new LinearInterpolator());
@@ -70,9 +72,7 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (animator != null && animator.isRunning()) {
-                    animator.end();
-                }
+
                 if (SongListViewModel.isClickAble() || !Objects.requireNonNull(SongListViewModel.getMusicInfo().getValue()).getId().equals(Objects.requireNonNull(SongListViewModel.getSongsList().getValue()).getResult().getTracks().get(holder.getAdapterPosition()).getId()) || SongListViewModel.getMusicInfo().getValue() == null) {
                     SongListViewModel.setClickAble(false);
                     if (old_holder != null) {
@@ -83,6 +83,15 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
                     }
                     old_holder = holder;
                     SongListViewModel.setCurrent(holder.getAdapterPosition(), OperationFrom.BOTTOM_BAR);
+                } else {
+                    if (animator != null && animator.isStarted()) {
+                        animator.end();
+                    } else {
+                        if (animator != null)
+                            animator.start();
+                    }
+                    SongListViewModel.setCurrent(holder.getAdapterPosition(), OperationFrom.BOTTOM_BAR);
+                    SongListViewModel.setClickAble(true);
                 }
             }
         });
@@ -100,7 +109,11 @@ public class SongsListAdapter extends ListAdapter<MusicInfo, SongsListAdapter.Vi
             holder.song_name.setTextColor(Color.RED);
             holder.song_duration.setTextColor(Color.RED);
             holder.setToys(View.VISIBLE);
-            setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
+            try {
+                setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f), RoomManager.getMusicController().isPlaying());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             old_holder = holder;
         } else {
             holder.order.setVisibility(View.VISIBLE);

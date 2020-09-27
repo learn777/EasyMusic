@@ -109,7 +109,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 adapter.submitList(neteaseResult.getResult().getTracks());
                 binding.songList.setAdapter(adapter);
                 binding.swiperefreshlayout.setRefreshing(false);
-                updateSongList(true);
+                updateSongList(true, true);
             }
         });
         //更新通知栏
@@ -118,7 +118,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             public void onChanged(Boolean aBoolean) {
                 if (!aBoolean) return;
                 updateObserver();
-                updateSongList(false);
+
             }
         });
     }
@@ -165,12 +165,15 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
             updateProgress = (HandleProgress) new HandleProgress(binding).execute();
         }
         SongListViewModel.getUpdate().setValue(false);
+        updateSongList(false, flag);
     }
 
     /*
      *  更新播放列表信息以及列表UI状态
+     * scrollToTop  滚动至列表顶部
+     * isPlay   播放状态
      */
-    private void updateSongList(boolean scrollToTop) {
+    private void updateSongList(boolean scrollToTop, boolean isPlay) {
         if (SongListViewModel.getCurrent() >= 0) {
             //改变原本播放的
             if (adapter.getOldHolder() != null) {
@@ -182,12 +185,6 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 adapter.getOldHolder().setToys(View.INVISIBLE);
                 adapter.getOldHolder().order.setVisibility(View.VISIBLE);
             }
-            LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(getContext()) {
-                @Override
-                protected int calculateTimeForScrolling(int dx) {
-                    return super.calculateTimeForScrolling(dx);
-                }
-            };
             //改变现在播放的
             System.out.println("SongListViewModel.getCurrent()::" + SongListViewModel.getCurrent());
             SongsListAdapter.ViewHolder holder;
@@ -199,7 +196,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                 holder.setToys(View.VISIBLE);
                 holder.song_name.setTextColor(Color.RED);
                 holder.song_duration.setTextColor(Color.RED);
-                adapter.setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f));
+                adapter.setAnimator(ObjectAnimator.ofFloat(holder.toys, "Rotation", 0f, 360f), isPlay);
                 adapter.setOld_holder(holder);
             }
         }
@@ -218,6 +215,9 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         try {
             if (RoomManager.getMusicController() != null && RoomManager.getMusicController().isPlaying()) {
                 updateProgress = (HandleProgress) new HandleProgress(binding).execute();
+                updateSongList(false, true);
+            } else {
+                updateSongList(false, false);
             }
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -225,7 +225,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         if (SongListViewModel.getMusicInfo().getValue() != null) {
             binding.songName.setText(Objects.requireNonNull(SongListViewModel.getMusicInfo().getValue()).getName());
         }
-        updateSongList(false);
+
         super.onResume();
     }
 
@@ -251,7 +251,7 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
         if (adapter.getAnimator() != null) {
             adapter.getAnimator().pause();
             adapter.getAnimator().end();
-            adapter.setAnimator(null);
+            adapter.setAnimator(null, false);
         }
         super.onPause();
     }

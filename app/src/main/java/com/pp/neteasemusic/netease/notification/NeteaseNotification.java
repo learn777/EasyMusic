@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import com.android.volley.Response;
 import com.android.volley.toolbox.ImageRequest;
 import com.pp.neteasemusic.R;
+import com.pp.neteasemusic.netease.cache.ImageCache;
 import com.pp.neteasemusic.netease.receiver.NetEaseReceiver;
 import com.pp.neteasemusic.netease.room.RoomManager;
 import com.pp.neteasemusic.netease.utils.ScreenSizeUtils;
@@ -27,7 +28,7 @@ public class NeteaseNotification {
     private static NotificationManager notificationManager;
     private static int NOTIFICATION_REQUEST_CODE_MUSIC = 0;
     private static int PENDING_REQUEST_CODE_MUSIC = 1;
-
+    private static RemoteViews remoteViews;
 
     public synchronized static void initInstance() {
         int px = ScreenSizeUtils.dip2px(60);
@@ -42,7 +43,7 @@ public class NeteaseNotification {
                 }
                 notificationManager.createNotificationChannel(channel);
             }
-            final RemoteViews remoteViews = new RemoteViews(RoomManager.getContext().getPackageName(), R.layout.cell_notification_music);
+            remoteViews = new RemoteViews(RoomManager.getContext().getPackageName(), R.layout.cell_notification_music);
             remoteViews.setTextViewText(R.id.song_name, "歌名");
             VolleySingleton.getInstance(RoomManager.getContext()).add(new ImageRequest("http://p2.music.126.net/IfEkDyu9LjSXYnOp90eP5g==/109951164767350572.jpg", new Response.Listener<Bitmap>() {
                 @Override
@@ -73,24 +74,34 @@ public class NeteaseNotification {
         }
     }
 
-    public static void update(final String resCover, final int resPlay, boolean reload) {
+    public static void update(final String resCover, final int resPlay, final boolean reload) {
         int px = ScreenSizeUtils.dip2px(60);
         if (instance != null) {
             if (reload) {
-                VolleySingleton.getInstance(null).add(new ImageRequest(resCover, new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap response) {
-                        instance.contentView.setImageViewBitmap(R.id.notification_cover, response);
-                        instance.contentView.setTextViewText(R.id.notification_name, SongListViewModel.getMusicInfo().getValue().getName());
-                        instance.contentView.setTextViewText(R.id.notification_singer, SongListViewModel.getMusicInfo().getValue().getArtists().get(0).getName());
-                        instance.contentView.setImageViewResource(R.id.notification_play, resPlay);
-                        notificationManager.notify(NOTIFICATION_REQUEST_CODE_MUSIC, instance);
-                    }
-                }, px, px, ImageView.ScaleType.FIT_XY, Bitmap.Config.RGB_565, null));
+                Bitmap bitmap = ImageCache.loadImageCache(String.valueOf(resCover.hashCode()));
+                if (bitmap != null) {
+                    update(bitmap, resPlay);
+                } else {
+                    VolleySingleton.getInstance(null).add(new ImageRequest(resCover, new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap response) {
+                            ImageCache.saveImageCache(String.valueOf(resCover.hashCode()), response);
+                            update(response, resPlay);
+                        }
+                    }, px, px, ImageView.ScaleType.FIT_XY, Bitmap.Config.RGB_565, null));
+                }
             } else {
                 instance.contentView.setImageViewResource(R.id.notification_play, resPlay);
                 notificationManager.notify(NOTIFICATION_REQUEST_CODE_MUSIC, instance);
             }
         }
+    }
+
+    private static void update(Bitmap bitmap, int resPlay) {
+        instance.contentView.setImageViewBitmap(R.id.notification_cover, bitmap);
+        instance.contentView.setTextViewText(R.id.notification_name, SongListViewModel.getMusicInfo().getValue().getName());
+        instance.contentView.setTextViewText(R.id.notification_singer, SongListViewModel.getMusicInfo().getValue().getArtists().get(0).getName());
+        instance.contentView.setImageViewResource(R.id.notification_play, resPlay);
+        notificationManager.notify(NOTIFICATION_REQUEST_CODE_MUSIC, instance);
     }
 }

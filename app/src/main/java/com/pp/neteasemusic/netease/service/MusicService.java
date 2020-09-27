@@ -8,6 +8,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 
 import com.pp.neteasemusic.IMusicController;
+import com.pp.neteasemusic.netease.cache.AudioCache;
 import com.pp.neteasemusic.netease.utils.OperationFrom;
 import com.pp.neteasemusic.netease.utils.ToastUtils;
 import com.pp.neteasemusic.ui.music.songlist.SongListViewModel;
@@ -23,21 +24,33 @@ public class MusicService extends Service {
         public boolean play(String id) {
             boolean flag = false;
             String uri = "http://music.163.com/song/media/outer/url?id=" + id + ".mp3";
-            System.out.println(uri);
+            String key = String.valueOf(id);
+            System.out.println("MusicService------------->1:" + uri);
+            System.out.println("MusicService------------->2:" + playNow);
             if (uri.equals(playNow)) {
                 flag = pause();
             } else {
-                try {
-                    playNow = uri;
-                    mediaPlayer.reset();
-                    mediaPlayer.setDataSource(uri);
-                    mediaPlayer.prepareAsync();
-                    flag = true;
-                } catch (IOException e) {
-                    e.printStackTrace();
+                playNow = uri;
+                System.out.println("MusicService------------->3:" + playNow);
+                if (AudioCache.loadAudioCache(key) != null)
+                    change(AudioCache.loadAudioCache(key));
+                else {
+                    change(uri);
+                    AudioCache.saveAudioCache(key, uri);
                 }
+                flag = true;
             }
             return flag;
+        }
+
+        private void change(String path) {
+            try {
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(path);
+                mediaPlayer.prepareAsync();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -75,7 +88,7 @@ public class MusicService extends Service {
 
         @Override
         public boolean isPlaying() {
-            return mediaPlayer.isPlaying();
+            return mediaPlayer != null && mediaPlayer.isPlaying();
         }
 
     };
