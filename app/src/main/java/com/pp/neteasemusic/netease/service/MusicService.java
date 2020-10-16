@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.pp.neteasemusic.IMusicController;
 import com.pp.neteasemusic.netease.cache.AudioCache;
+import com.pp.neteasemusic.netease.utils.AudioManager;
 import com.pp.neteasemusic.netease.utils.OperationFrom;
 import com.pp.neteasemusic.netease.utils.ToastUtils;
 import com.pp.neteasemusic.ui.music.songlist.SongListViewModel;
@@ -22,7 +23,7 @@ public class MusicService extends Service {
 
         @Override
         public boolean play(String id) {
-            boolean flag = false;
+            boolean flag;
             String uri = "http://music.163.com/song/media/outer/url?id=" + id + ".mp3";
             String key = String.valueOf(id);
             System.out.println("MusicService------------->1:" + uri);
@@ -45,6 +46,10 @@ public class MusicService extends Service {
 
         private void change(String path) {
             try {
+                if (AudioManager.getHasFocus().getValue() != null && !AudioManager.getHasFocus().getValue()) {
+                    AudioManager.initAudioFocus(getApplicationContext());
+                }
+                mediaPlayer.stop();
                 mediaPlayer.reset();
                 mediaPlayer.setDataSource(path);
                 mediaPlayer.prepareAsync();
@@ -59,6 +64,9 @@ public class MusicService extends Service {
                 mediaPlayer.pause();
                 return false;
             } else {
+                if (AudioManager.getHasFocus().getValue() != null && !AudioManager.getHasFocus().getValue()) {
+                    AudioManager.initAudioFocus(getApplicationContext());
+                }
                 mediaPlayer.start();
                 return true;
             }

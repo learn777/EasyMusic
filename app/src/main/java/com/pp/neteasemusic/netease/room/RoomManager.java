@@ -2,7 +2,6 @@ package com.pp.neteasemusic.netease.room;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.view.Display;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -17,21 +16,14 @@ public class RoomManager {
     private static ViewPager viewPager = null;
     private static SwipeRefreshLayout refreshLayout = null;
     private static IMusicController musicController = null;
-    private static Display display;
     private static DisplayMetrics displayMetrics;
 
     public static DisplayMetrics getDisplayMetrics() {
         return displayMetrics;
     }
 
-    public static Display getDisplay() {
-        return display;
-    }
-
-    public static void setDisplay(Display display) {
-        displayMetrics = new DisplayMetrics();
-        display.getMetrics(displayMetrics);
-        RoomManager.display = display;
+    public static void setDisplay(DisplayMetrics displayMetrics) {
+        RoomManager.displayMetrics = displayMetrics;
     }
 
     public static SwipeRefreshLayout getRefreshLayout() {
@@ -47,7 +39,7 @@ public class RoomManager {
     }
 
     public static void initRoomManager(Context context) {
-        RoomManager.context = context;
+        RoomManager.context = context.getApplicationContext();
     }
 
     public static ViewPager getViewPager() {

@@ -48,6 +48,7 @@ public class DataRequest {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                RoomManager.getRefreshLayout().setRefreshing(false);
                 ToastUtils.ToastNoAppName("请检查网络").show();
             }
         }));

@@ -48,7 +48,7 @@ public class PlayListAdapter extends ListAdapter<PlayList, PlayListAdapter.PlayL
     @Override
     public PlayListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final PlayListViewHolder holder = new PlayListViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_play_list, parent, false));
-        View.OnClickListener listener = new View.OnClickListener() {
+        View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!DataRequest.getPlayListID().equals(getCurrentList().get(holder.getAdapterPosition()).getPlayID())) {
@@ -64,8 +64,18 @@ public class PlayListAdapter extends ListAdapter<PlayList, PlayListAdapter.PlayL
                 }
             }
         };
-        holder.itemView.setOnClickListener(listener);
-        holder.cover.setOnClick(listener);
+        View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                RoomManager.getDao().delete(getCurrentList().get(holder.getAdapterPosition()).getPlayID());
+                submitList(RoomManager.getDao().getAll());
+                return true;
+            }
+        };
+        holder.itemView.setOnClickListener(clickListener);
+        holder.itemView.setOnLongClickListener(longClickListener);
+//        holder.cover.setOnLongClickListener(longClickListener);
+//        holder.cover.setOnClickListener(clickListener);
         return holder;
     }
 

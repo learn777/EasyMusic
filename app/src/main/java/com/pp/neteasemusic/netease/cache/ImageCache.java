@@ -20,7 +20,7 @@ public class ImageCache {
         try {
             File cache = new File(RoomManager.getContext().getCacheDir(), "image");
             int appVersion = RoomManager.getContext().getPackageManager().getPackageInfo(RoomManager.getContext().getPackageName(), 0).versionCode;
-            imageCache = DiskLruCache.open(cache, appVersion, 1, 1024 * 1024 * 20);
+            imageCache = DiskLruCache.open(cache, appVersion, 1, 1024 * 1024 * 70);
         } catch (IOException | PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

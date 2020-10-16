@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class AudioCache {
@@ -21,9 +22,15 @@ public class AudioCache {
         try {
             File cache = new File(RoomManager.getContext().getCacheDir(), "music");
             int appVersion = RoomManager.getContext().getPackageManager().getPackageInfo(RoomManager.getContext().getPackageName(), 0).versionCode;
-            audioCache = DiskLruCache.open(cache, appVersion, 1, 200 * 1024 * 1024);
+            audioCache = DiskLruCache.open(cache, appVersion, 1, 500 * 1024 * 1024);
         } catch (PackageManager.NameNotFoundException | IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void setSize(int size) {
+        if (audioCache != null) {
+            audioCache.setMaxSize(size * 1024 * 1024);
         }
     }
 
@@ -66,7 +73,11 @@ public class AudioCache {
                     URL url = new URL(uri);
                     editor = audioCache.edit(key);
                     if (editor != null) {
-                        ins = url.openConnection().getInputStream();
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        if (connection.getContentType() == null) {
+                            return;
+                        }
+                        ins = connection.getInputStream();
                         ous = editor.newOutputStream(0);
                         int read;
                         int count = 0;

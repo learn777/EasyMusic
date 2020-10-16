@@ -144,7 +144,8 @@ public class SongListFragment extends Fragment implements View.OnClickListener {
                         if (layoutManager != null && (SongListViewModel.getCurrent() < layoutManager.findFirstVisibleItemPosition() || SongListViewModel.getCurrent() >= layoutManager.findLastVisibleItemPosition())) {
                             int scrollTO = layoutManager.findFirstVisibleItemPosition();
                             scrollTO = scrollTO > SongListViewModel.getCurrent() ? SongListViewModel.getCurrent() - layoutManager.getChildCount() / 2 : SongListViewModel.getCurrent() + layoutManager.getChildCount() / 2;
-                            binding.songList.smoothScrollToPosition(scrollTO);
+                            if (SongListViewModel.getCurrent() != -1)
+                                binding.songList.smoothScrollToPosition(scrollTO);
                         }
                     }
                 }
